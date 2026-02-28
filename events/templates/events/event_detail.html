@@ -43,6 +43,7 @@
 
 <p>
     <a href="{% url 'event_edit' event.pk %}">Edit</a> |
+    <a href="{% url 'event_delete' event.pk %}" style="color:red;">Delete</a> |
     <a href="{% url 'event_list' %}">Back to list</a>
 </p>
 {% endblock %}

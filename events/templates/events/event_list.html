@@ -8,6 +8,7 @@
     <p>
         <a href="{% url 'events_home' %}">Home</a> |
         <a href="{% url 'event_create' %}">Add Event</a>
+        {% if user.is_authenticated %} | <a href="{% url 'my_events' %}">My Events</a>{% endif %}
     </p>
     <ul>
         {% for event in events %}

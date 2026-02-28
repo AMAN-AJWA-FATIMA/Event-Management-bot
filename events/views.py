@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -79,3 +79,16 @@ class EventUpdateView(UpdateView):
     template_name = 'events/event_form.html'
     context_object_name = 'event'
     success_url = reverse_lazy('event_list')
+
+
+class EventDeleteView(DeleteView):
+    model = Event
+    template_name = 'events/event_confirm_delete.html'
+    context_object_name = 'event'
+    success_url = reverse_lazy('event_list')
+
+
+@login_required
+def my_events(request):
+    registrations = Registration.objects.filter(user=request.user).select_related('event', 'role').order_by('-registered_at')
+    return render(request, 'events/my_events.html', {'registrations': registrations})
