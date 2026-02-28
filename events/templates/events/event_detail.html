@@ -9,9 +9,35 @@
     <p><strong>Start:</strong> {{ event.start_date|date:"M d, Y H:i" }}</p>
     <p><strong>End:</strong> {{ event.end_date|date:"M d, Y H:i" }}</p>
     <p><strong>Max participants:</strong> {{ event.max_participants }}</p>
+    <p><strong>Participants:</strong> {{ registrations|length }} / {{ event.max_participants }}</p>
+{% if registrations|length >= event.max_participants %}
+    <p style="color: red;">This event is full.</p>
+{% endif %}
+
+    <h2>Participants ({{ registrations|length }})</h2>
+    <ul>
+        {% for reg in registrations %}
+        <li>{{ reg.user.username }}{% if reg.role %} - {{ reg.role.name }}{% endif %}</li>
+        {% empty %}
+        <li>No participants yet.</li>
+        {% endfor %}
+    </ul>
+   {% if user.is_authenticated %}
+    {% if registrations|length >= event.max_participants %}
+        <p>Event is full. Registration closed.</p>
+    {% else %}
+        <form action="{% url 'event_register' event.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Register for this event</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p><a href="{% url 'admin:login' %}">Login</a> to register.</p>
+{% endif %}
     <p>
         <a href="{% url 'event_edit' event.pk %}">Edit</a> |
         <a href="{% url 'event_list' %}">Back to list</a>
     </p>
 </body>
 </html>
+
