@@ -122,5 +122,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login redirect - where to send user after login
-
+# Login
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/'

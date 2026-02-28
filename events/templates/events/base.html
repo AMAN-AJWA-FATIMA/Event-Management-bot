@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Event Management{% endblock %}</title>
+</head>
+<body>
+    {% if messages %}
+    <ul style="list-style:none; padding:0;">
+        {% for message in messages %}
+        <li style="padding:8px; margin:4px 0; background:{% if message.tags == 'success' %}#d4edda{% else %}#fff3cd{% endif %}; border-radius:4px;">
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+</body>
+</html>
