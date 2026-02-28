@@ -48,6 +48,18 @@
         </form>
     {% endif %}
 {% else %}
+{% if user.is_authenticated %}
+    {% with user_reg=registrations|dictsort:"user_id" %}
+    {% for reg in registrations %}
+        {% if reg.user == user %}
+        <form action="{% url 'event_unregister' event.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Unregister</button>
+        </form>
+        {% endif %}
+    {% endfor %}
+    {% endwith %}
+{% endif %}
     <p><a href="{% url 'admin:login' %}">Login</a> to register.</p>
 {% endif %}
     <p>
