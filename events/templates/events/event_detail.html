@@ -14,6 +14,15 @@
     <p style="color: red;">This event is full.</p>
 {% endif %}
 
+<h2>Roles</h2>
+<ul>
+    {% for role in event.roles.all %}
+    <li>{{ role.name }} (max: {% if role.max_capacity %}{{ role.max_capacity }}{% else %}unlimited{% endif %})</li>
+    {% empty %}
+    <li>No roles defined.</li>
+    {% endfor %}
+</ul>
+
     <h2>Participants ({{ registrations|length }})</h2>
     <ul>
         {% for reg in registrations %}
@@ -22,12 +31,19 @@
         <li>No participants yet.</li>
         {% endfor %}
     </ul>
-   {% if user.is_authenticated %}
+ {% if user.is_authenticated %}
     {% if registrations|length >= event.max_participants %}
         <p>Event is full. Registration closed.</p>
     {% else %}
-        <form action="{% url 'event_register' event.pk %}" method="post" style="display:inline;">
+        <form action="{% url 'event_register' event.pk %}" method="post">
             {% csrf_token %}
+            <label>Role (optional):</label>
+            <select name="role">
+                <option value="">No role</option>
+                {% for role in event.roles.all %}
+                <option value="{{ role.pk }}">{{ role.name }}</option>
+                {% endfor %}
+            </select>
             <button type="submit">Register for this event</button>
         </form>
     {% endif %}
@@ -40,4 +56,5 @@
     </p>
 </body>
 </html>
+
 
