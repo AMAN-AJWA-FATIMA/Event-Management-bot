@@ -1,0 +1,55 @@
+{% extends 'events/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card admin-accent">
+    <h1>Dashboard</h1>
+    <p class="nav-links">
+        <a href="{% url 'events_home' %}">Home</a>
+        <a href="{% url 'event_list' %}">All events</a>
+        <a href="{% url 'event_create' %}" class="primary">Add Event</a>
+        <a href="{% url 'my_events' %}">My Events</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </p>
+</div>
+<div class="card-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ total_events }}</span>
+        <span class="stat-label">Total Events</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ total_registrations }}</span>
+        <span class="stat-label">My Registrations</span>
+    </div>
+</div>
+<div class="card">
+    <h2>Upcoming Events</h2>
+    {% if upcoming %}
+    <ul class="event-list">
+        {% for reg in upcoming %}
+        <li>
+            <a href="{% url 'event_detail' reg.event.pk %}">{{ reg.event.name }}</a>
+            <span style="color:var(--text-muted);">– {{ reg.event.start_date|date:"M d, Y" }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:var(--text-muted);">No upcoming events.</p>
+    {% endif %}
+</div>
+<div class="card">
+    <h2>Recent Events</h2>
+    {% if recent_events %}
+    <ul class="event-list">
+        {% for event in recent_events %}
+        <li>
+            <a href="{% url 'event_detail' event.pk %}">{{ event.name }}</a>
+            <span style="color:var(--text-muted);">– {{ event.start_date|date:"M d, Y" }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:var(--text-muted);">No events yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

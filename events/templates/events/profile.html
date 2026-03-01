@@ -1,0 +1,13 @@
+{% extends 'events/base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="card user-accent">
+    <h1>Profile</h1>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
+    <p class="nav-links" style="margin-top:16px; padding:0;">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'password_reset' %}">Change password</a>
+    </p>
+</div>
+{% endblock %}

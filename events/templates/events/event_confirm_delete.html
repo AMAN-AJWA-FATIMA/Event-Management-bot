@@ -1,12 +1,16 @@
 {% extends 'events/base.html' %}
 {% block title %}Delete {{ event.name }}{% endblock %}
 {% block content %}
-<h1>Delete Event</h1>
-<p>Are you sure you want to delete <strong>{{ event.name }}</strong>?</p>
-<p>This will also delete all roles and registrations for this event.</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-</form>
-<p><a href="{% url 'event_detail' event.pk %}">Cancel</a></p>
+<div class="card admin-accent">
+    <h1>Delete Event</h1>
+    <p>Are you sure you want to delete <strong>{{ event.name }}</strong>?</p>
+    <p style="color:var(--text-muted); margin-top:8px;">This will also delete all roles and registrations for this event.</p>
+    <form method="post" style="margin-top:20px;">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+    </form>
+    <p class="nav-links" style="margin-top:16px; padding:0;">
+        <a href="{% url 'event_detail' event.pk %}">Cancel</a>
+    </p>
+</div>
 {% endblock %}

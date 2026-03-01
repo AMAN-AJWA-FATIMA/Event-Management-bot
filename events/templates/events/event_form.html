@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{% if object %}Edit Event{% else %}Create Event{% endif %}</title>
-</head>
-<body>
+{% extends 'events/base.html' %}
+{% block title %}{% if object %}Edit Event{% else %}Create Event{% endif %}{% endblock %}
+{% block content %}
+<div class="card {% if user.is_staff %}admin-accent{% else %}user-accent{% endif %}">
     <h1>{% if object %}Edit Event{% else %}Create Event{% endif %}</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
-    <p><a href="{% url 'event_list' %}">Cancel</a></p>
-</body>
-</html>
+</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<div class="card">
+    <p class="nav-links">
+        <a href="{% url 'event_list' %}">Cancel</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,21 +1,23 @@
 {% extends 'events/base.html' %}
 {% block title %}My Events{% endblock %}
 {% block content %}
-<h1>My Events</h1>
-<p>
-    <a href="{% url 'events_home' %}">Home</a> |
-    <a href="{% url 'event_list' %}">All events</a> |
-    <a href="{% url 'event_create' %}">Add Event</a>
-</p>
-<ul>
-    {% for reg in registrations %}
-    <li>
-        <a href="{% url 'event_detail' reg.event.pk %}">{{ reg.event.name }}</a>
-        {% if reg.role %} – {{ reg.role.name }}{% endif %}
-        ({{ reg.registered_at|date:"M d, Y" }})
-    </li>
-    {% empty %}
-    <li>You are not registered for any events yet.</li>
-    {% endfor %}
-</ul>
+<div class="card user-accent">
+    <h1>My Events</h1>
+    <p class="nav-links">
+        <a href="{% url 'events_home' %}">Home</a>
+        <a href="{% url 'event_list' %}">All events</a>
+        <a href="{% url 'event_create' %}" class="primary">Add Event</a>
+    </p>
+    <ul class="event-list">
+        {% for reg in registrations %}
+        <li>
+            <a href="{% url 'event_detail' reg.event.pk %}">{{ reg.event.name }}</a>
+            {% if reg.role %}<span style="color:var(--text-muted);">– {{ reg.role.name }}</span>{% endif %}
+            <span style="color:var(--text-muted); font-size:0.9rem;">({{ reg.registered_at|date:"M d, Y" }})</span>
+        </li>
+        {% empty %}
+        <li style="opacity:0.8;">You are not registered for any events yet.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

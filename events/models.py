@@ -2,13 +2,32 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class EventCategory(models.Model):
+    """Event category (Tech, Meetup, Conference, etc.)"""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    color = models.CharField(max_length=7, default='#6366f1')
+
+    def __str__(self):
+        return self.name
+
+
 class Event(models.Model):
     """An event with capacity limits."""
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+        ('cancelled', 'Cancelled'),
+        ('completed', 'Completed'),
+    ]
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     max_participants = models.PositiveIntegerField(default=100)
+    category = models.ForeignKey(EventCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='events')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='published')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_events')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

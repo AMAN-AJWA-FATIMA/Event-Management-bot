@@ -1,19 +1,62 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Event Management{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f1419">
+    <title>{% block title %}Event Management{% endblock %} | Event Bot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'events/css/style.css' %}">
 </head>
 <body>
-    {% if messages %}
-    <ul style="list-style:none; padding:0;">
-        {% for message in messages %}
-        <li style="padding:8px; margin:4px 0; background:{% if message.tags == 'success' %}#d4edda{% else %}#fff3cd{% endif %}; border-radius:4px;">
-            {{ message }}
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% block content %}{% endblock %}
+    <!-- Animated background canvas -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+        <div class="orb orb-5"></div>
+        <div class="orb orb-6"></div>
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
+        <div class="calendar-shape shape-1"></div>
+        <div class="calendar-shape shape-2"></div>
+        <div class="calendar-shape shape-3"></div>
+        <div class="calendar-shape shape-4"></div>
+        <div class="calendar-shape shape-5"></div>
+        <div class="grid-overlay"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <div class="content-wrapper">
+        <header class="app-header">
+            <a href="{% url 'events_home' %}" style="text-decoration:none; color:inherit; font-weight:700; font-size:1.25rem;">Event Bot</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" style="text-decoration:none; color:var(--text-secondary); font-size:0.95rem;">Dashboard</a>
+            {% else %}
+            <a href="{% url 'login' %}" style="text-decoration:none; color:var(--text-secondary); font-size:0.95rem;">Login</a>
+            {% endif %}
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <span id="theme-icon"></span>
+                <span id="theme-label">Light</span>
+            </button>
+        </header>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{% static 'events/js/theme.js' %}"></script>
 </body>
 </html>

@@ -1,24 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>All Events</title>
-</head>
-<body>
+{% extends 'events/base.html' %}
+{% block title %}All Events{% endblock %}
+{% block content %}
+<div class="card {% if user.is_staff %}admin-accent{% else %}user-accent{% endif %}">
     <h1>All Events</h1>
-    <p>
-        <a href="{% url 'events_home' %}">Home</a> |
-        <a href="{% url 'event_create' %}">Add Event</a>
-        {% if user.is_authenticated %} | <a href="{% url 'my_events' %}">My Events</a>{% endif %}
+    <p class="nav-links">
+        <a href="{% url 'events_home' %}">Home</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'event_create' %}" class="primary">Add Event</a>
+        {% if user.is_authenticated %}<a href="{% url 'my_events' %}">My Events</a>{% endif %}
     </p>
-    <ul>
+    <form method="get" class="search-filter-form">
+        <input type="text" name="q" placeholder="Search events..." value="{{ search_q }}" class="search-input">
+        <select name="category" class="filter-select">
+            <option value="">All categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat.pk }}" {% if filter_category == cat.pk %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    <ul class="event-list">
         {% for event in events %}
         <li>
             <a href="{% url 'event_detail' event.pk %}">{{ event.name }}</a>
-            – {{ event.start_date|date:"M d, Y" }}
+            {% if event.category %}<span class="category-badge" style="background:{{ event.category.color }}20; color:{{ event.category.color }};">{{ event.category.name }}</span>{% endif %}
+            <span style="color:var(--text-muted); font-size:0.9rem;">– {{ event.start_date|date:"M d, Y" }}</span>
         </li>
         {% empty %}
-        <li>No events yet.</li>
+        <li style="opacity:0.8;">No events found.</li>
         {% endfor %}
     </ul>
-</body>
-</html>
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if search_q %}&q={{ search_q }}{% endif %}{% if filter_category %}&category={{ filter_category }}{% endif %}">Prev</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search_q %}&q={{ search_q }}{% endif %}{% if filter_category %}&category={{ filter_category }}{% endif %}">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

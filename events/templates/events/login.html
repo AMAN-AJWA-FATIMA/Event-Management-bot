@@ -1,0 +1,17 @@
+{% extends 'events/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="card user-accent" style="max-width:400px; margin:40px auto;">
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <p class="nav-links" style="margin-top:16px; padding:0;">
+        <a href="{% url 'register' %}">Register</a>
+        <a href="{% url 'password_reset' %}">Forgot password?</a>
+        <a href="{% url 'events_home' %}">Home</a>
+    </p>
+</div>
+{% endblock %}
